@@ -76,10 +76,10 @@ for(i in 1:length(gage_file_list)) {
   
   output.gage <- output.gage  %>% 
     bind_rows(pivoted_results)
-  
-  # write.csv(pivoted_results, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "gage", gage_ID, "ffc_result.csv", sep = "_"), row.names = F)
-  
+
 }
+
+write.csv(output.gage, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "gage", "ffc_results.csv", sep = "_"), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 2 : loop through model columns for ffc calculations (loop takes approx 13 minutes to run for 122 columns)
@@ -123,10 +123,10 @@ for(k in 2:length(model.columns)) {
   
   output.model <- output.model  %>% 
     bind_rows(pivoted_model_results)
-  
-  # write.csv(pivoted_model_results, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "model", soi$model_ID, "ffc_result.csv", sep = "_"), row.names = F)
-  
+
 }
+
+write.csv(output.model, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "model", "ffc_results.csv", sep = "_"), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 3 : loop through boxplots to compare gaged and modeled data
