@@ -1,7 +1,8 @@
 # ======================================================================================================================
 #### SET-UP : Load libaries, set token, and import data sources
 # ======================================================================================================================
-#### libraries
+#### load necessary libraries
+# for first time users, use the following line to install ffc tool package:
 # devtools::install_github('ceff-tech/ffc_api_client/ffcAPIClient')
 library(devtools)
 library(usethis)
@@ -11,6 +12,7 @@ library(fs)
 library(ffcAPIClient)
 
 #### set-up token for use
+# token is unique to each user
 ffctoken <- 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJBZHJpYW5hIiwibGFzdE5hbWUiOiJMZSBDb21wdGUiLCJlbWFpbCI6ImFkcmlhbmFsc0BzY2N3cnAub3JnIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE2OTMyNTA2Njl9.mjM3WqZJXJdaJHEqN5e5Fh90JFgERzERqxiksSCpGbE'
 ffctoken <- ffcAPIClient::set_token(Sys.getenv("EFLOWS_TOKEN", ""))
 ffc <- ffcAPIClient::FFCProcessor$new()
@@ -34,9 +36,10 @@ Model_Watershed_eval <- "ER"
 # list the timeseries files you want to loop through
 gage_file_list <- list.files(gage_data, full.names = T)
 
-# create empty dataframe to place results into
+# create empty dataframe to place results from loop once it's done
 output.gage <- data.frame()
 
+# create an empty dataframe to store errors if they occur
 error_files <- c()
 
 for(i in 1:length(gage_file_list)) {
@@ -79,12 +82,16 @@ for(i in 1:length(gage_file_list)) {
 
 }
 
+# save all gage results from ffc calculations into one csv
 write.csv(output.gage, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "gage", "ffc_results.csv", sep = "_"), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 2 : loop through model columns for ffc calculations (loop takes approx 13 minutes to run for 122 columns)
 # ======================================================================================================================
+# isolate the columns with model results for analysis
 model.columns <- colnames(model_data)
+
+# create empty dataframe to place results from loop once it's done
 output.model <- data.frame()
 
 for(k in 2:length(model.columns)) {
@@ -126,6 +133,7 @@ for(k in 2:length(model.columns)) {
 
 }
 
+# save all model results from ffc calculations into one csv
 write.csv(output.model, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", "model", "ffc_results.csv", sep = "_"), row.names = F)
 
 # ======================================================================================================================
