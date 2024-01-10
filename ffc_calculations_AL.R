@@ -178,9 +178,10 @@ for(p in 1:length(COMID_list)){
       ggplot(aes(x = data_type, y = value, fill = data_type))+
       geom_boxplot()+
       facet_wrap(~ffm, scales = "free")+
-      labs(title = paste0("COMID:", df.1$COMID, ", Gage:", df.1$gageID, ", Model ID:", modelID.p),
-           subtitle = paste0("Gage type: ", gage.type.p$gage_type))
-    # ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/boxplots/", unique(df.2$COMID), unique(df.2$title_component), "boxplot.jpg", sep = "_"), dpi = 150, boxplot)
+      theme(axis.title.x = element_blank())+
+      labs(title = unique.component[y],
+           subtitle = paste0("COMID:", df.1$COMID, ", Gage:", df.1$gageID, ", Model ID:", modelID.p, ", Gage type: ", gage.type.p$gage_type))
+    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/boxplots/", Model_Watershed_eval,"_", unique(df.2$COMID),"_",unique(df.2$title_component),"_boxplot.jpg",sep = ""), dpi = 150, boxplot)
     print(boxplot)
     
   }
@@ -223,7 +224,7 @@ for(r in 1:length(COMID_list)){
       geom_abline(intercept = 0, slope = 1)+
       labs(title = paste0(unique.component[z]),
            subtitle = paste0("COMID:", df.1$COMID, ", Model ID:", modelID.r, ", Gage ID:", df.1$gageID, ", Gage type: ", gage.type.r$gage_type))
-    # ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/scatterplots/", unique(df.2$COMID), unique(df.2$title_component), "scatterplot.jpg", sep = "_"), dpi = 150, scatter_plot)
+    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/scatterplots/", Model_Watershed_eval, "_", unique(df.2$COMID),"_", unique(df.2$title_component), "_scatterplot.jpg", sep = ""), dpi = 150, scatter_plot)
     print(scatter_plot)
     
     residual_plot <- ggplot(df.2, aes(x = gage.value, y = residual))+
@@ -232,7 +233,7 @@ for(r in 1:length(COMID_list)){
       geom_hline(yintercept = 0, linetype = 2)+
       labs(title = paste0(unique.component[z]),
            subtitle = paste0("COMID:", df.1$COMID, ", Model ID:", modelID.r, ", Gage ID:", df.1$gageID, ", Gage type: ", gage.type.r$gage_type))
-    # ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/residuals/", unique(df.2$COMID), unique(df.2$title_component), "residualplot.jpg", sep = "_"), dpi = 150, residual_plot)
+    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/residuals/", Model_Watershed_eval,"_", unique(df.2$COMID),"_", unique(df.2$title_component), "_residualplot.jpg", sep = ""), dpi = 150, residual_plot)
     print(residual_plot)
     
   }
