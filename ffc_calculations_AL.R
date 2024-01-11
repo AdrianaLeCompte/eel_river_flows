@@ -79,11 +79,12 @@ for(i in 1:length(gage_file_list)) {
   
   output.gage <- output.gage  %>% 
     bind_rows(pivoted_results)
-
 }
 
 # save all gage results from ffc calculations into one csv
-write.csv(output.gage, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
+export.gage <- output.gage %>% 
+  rename(FFM = ffm, Value = gage.value, gage_ID = gageID)
+write.csv(export.gage, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 2 : loop through model columns for ffc calculations (loop takes approx 13 minutes to run for 122 columns)
@@ -134,17 +135,19 @@ for(k in 2:length(model.columns)) {
 }
 
 # save all model results from ffc calculations into one csv
-write.csv(output.model, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
+export.model <- output.model %>% 
+  rename(FFM = ffm, Value = model.value)
+write.csv(export.model, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 3 : loop through boxplots to compare gaged and modeled data
 # ======================================================================================================================
 output.model.2 <- output.model %>%
-  rename(value = model.value) %>%
+  rename(Value = model.value) %>% 
   mutate(data_type = "predicted")
 
 output.gage.2 <- output.gage %>%
-  rename(value = gage.value) %>%
+  rename(Value = gage.value) %>% 
   mutate(data_type = "observed")
 
 metrics <-  metric_categories_file %>% select(flow_metric, title_component) %>% 
