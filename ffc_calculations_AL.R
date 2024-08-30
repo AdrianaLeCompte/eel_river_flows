@@ -87,7 +87,7 @@ for(i in 1:length(gage_file_list)) {
 # save all gage results from ffc calculations into one csv
 export.gage <- output.gage %>% 
   rename(FFM = ffm, Value = gage.value, gage_ID = gageID)
-write.csv(export.gage, paste("FFC_outputs/Eel_River_recal_083024/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
+write.csv(export.gage, paste("FFC_outputs/Eel_River_recal_083024/csv_results/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 2 : loop through model columns for ffc calculations (loop takes approx 13 minutes to run for 122 columns)
@@ -140,7 +140,7 @@ for(k in 2:length(model.columns)) {
 # save all model results from ffc calculations into one csv
 export.model <- output.model %>% 
   rename(FFM = ffm, Value = model.value)
-write.csv(export.model, paste("FFC_outputs/Eel_River_recal_083024/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
+write.csv(export.model, paste("FFC_outputs/Eel_River_recal_083024/csv_results/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 3 : loop through boxplots to compare gaged and modeled data
