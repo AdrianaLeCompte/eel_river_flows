@@ -19,12 +19,15 @@ ffc <- ffcAPIClient::FFCProcessor$new()
 # ffc$set_up(token = ffctoken) - gives error "need either a gage ID or a timeseries of data to proceed"
 # ffc$run()
 
+# set wd
+setwd("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/")
+
 #### read-in data and lookup tables
-lu_model <- read_xlsx("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/Eel_River/Lookup_Tables/LOOKUP_table_all_v2 - Copy.xlsx", sheet = "LU_model")
-lu_gage <- read_xlsx("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/Eel_River/Lookup_Tables/LOOKUP_table_all_v2 - Copy.xlsx", sheet = "LU_gage")
-model_data <- read.csv("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/Eel_River/MODEL/eel_subbasins.sub_cfs.csv", check.names = F)
-gage_data <- ("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/Eel_River/GAGES")
-metric_categories_file <- read.csv("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/Eel_River/Lookup_Tables/all_metric_def_list_FFMs_v2 1.csv")
+lu_model <- read_xlsx("Eel_River/Lookup_Tables/LOOKUP_table_all_v2 - Copy.xlsx", sheet = "LU_model")
+lu_gage <- read_xlsx("Eel_River/Lookup_Tables/LOOKUP_table_all_v2 - Copy.xlsx", sheet = "LU_gage")
+model_data <- read.csv("Eel_River_recalibration/eel_subbasins.spring_summer_calibration_sub_cfs.csv", check.names = F)
+gage_data <- ("Eel_River/GAGES")
+metric_categories_file <- read.csv("Eel_River/Lookup_Tables/all_metric_def_list_FFMs_v2 1.csv")
 
 #### user specify the Model_Watershed abbreviation (Eel River is ER, Redwood Creek is RWC, Little River is LR, Red Wood Creek is RWC, Mad River is MR) based on the model_data csv name
 Model_Watershed_eval <- "ER"
@@ -84,7 +87,7 @@ for(i in 1:length(gage_file_list)) {
 # save all gage results from ffc calculations into one csv
 export.gage <- output.gage %>% 
   rename(FFM = ffm, Value = gage.value, gage_ID = gageID)
-write.csv(export.gage, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
+write.csv(export.gage, paste("FFC_outputs/Eel_River_recal_083024/", Model_Watershed_eval, "_gage_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 2 : loop through model columns for ffc calculations (loop takes approx 13 minutes to run for 122 columns)
@@ -137,7 +140,7 @@ for(k in 2:length(model.columns)) {
 # save all model results from ffc calculations into one csv
 export.model <- output.model %>% 
   rename(FFM = ffm, Value = model.value)
-write.csv(export.model, paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/csv_results/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
+write.csv(export.model, paste("FFC_outputs/Eel_River_recal_083024/", Model_Watershed_eval, "_model_", "ffc_results.csv", sep = ""), row.names = F)
 
 # ======================================================================================================================
 #### LOOP 3 : loop through boxplots to compare gaged and modeled data
@@ -178,13 +181,13 @@ for(p in 1:length(COMID_list)){
       filter(title_component %in% unique.component[y])
     
     boxplot <- df.2 %>%
-      ggplot(aes(x = data_type, y = value, fill = data_type))+
+      ggplot(aes(x = data_type, y = Value, fill = data_type))+
       geom_boxplot()+
       facet_wrap(~ffm, scales = "free")+
       theme(axis.title.x = element_blank())+
       labs(title = unique.component[y],
            subtitle = paste0("COMID:", df.1$COMID, ", Gage:", df.1$gageID, ", Model ID:", modelID.p, ", Gage type: ", gage.type.p$gage_type))
-    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/boxplots/", Model_Watershed_eval,"_", unique(df.2$COMID),"_",unique(df.2$title_component),"_boxplot.jpg",sep = ""), dpi = 150, boxplot)
+    ggsave(file = paste("FFC_outputs/Eel_River_recal_083024/boxplots/", Model_Watershed_eval,"_", unique(df.2$COMID),"_",unique(df.2$title_component),"_boxplot.jpg",sep = ""), dpi = 150, boxplot)
     print(boxplot)
     
   }
@@ -227,7 +230,7 @@ for(r in 1:length(COMID_list)){
       geom_abline(intercept = 0, slope = 1)+
       labs(title = paste0(unique.component[z]),
            subtitle = paste0("COMID:", df.1$COMID, ", Model ID:", modelID.r, ", Gage ID:", df.1$gageID, ", Gage type: ", gage.type.r$gage_type))
-    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/scatterplots/", Model_Watershed_eval, "_", unique(df.2$COMID),"_", unique(df.2$title_component), "_scatterplot.jpg", sep = ""), dpi = 150, scatter_plot)
+    ggsave(file = paste("FFC_outputs/Eel_River_recal_083024/scatterplots/", Model_Watershed_eval, "_", unique(df.2$COMID),"_", unique(df.2$title_component), "_scatterplot.jpg", sep = ""), dpi = 150, scatter_plot)
     print(scatter_plot)
     
     residual_plot <- ggplot(df.2, aes(x = gage.value, y = residual))+
@@ -236,7 +239,7 @@ for(r in 1:length(COMID_list)){
       geom_hline(yintercept = 0, linetype = 2)+
       labs(title = paste0(unique.component[z]),
            subtitle = paste0("COMID:", df.1$COMID, ", Model ID:", modelID.r, ", Gage ID:", df.1$gageID, ", Gage type: ", gage.type.r$gage_type))
-    ggsave(file = paste("C:/Users/adrianal/SCCWRP/Cannabis E-Flows - Data/Working/Watershed_Delineation_Tool/Modeled_Flow/FFC_outputs/residuals/", Model_Watershed_eval,"_", unique(df.2$COMID),"_", unique(df.2$title_component), "_residualplot.jpg", sep = ""), dpi = 150, residual_plot)
+    ggsave(file = paste("FFC_outputs/Eel_River_recal_083024/residuals/", Model_Watershed_eval,"_", unique(df.2$COMID),"_", unique(df.2$title_component), "_residualplot.jpg", sep = ""), dpi = 150, residual_plot)
     print(residual_plot)
     
   }
